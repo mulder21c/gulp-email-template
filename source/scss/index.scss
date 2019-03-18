@@ -1,0 +1,21 @@
+body {
+  display: block;
+  margin: 0 auto;
+  max-width: 750px;
+  width: 100%;
+
+  > table {
+    margin: 0 auto;
+    padding: 0;
+    max-width: 750px;
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+
+    td {
+      margin: 0;
+      padding: 0;
+      border: 0;
+    }
+  }
+}
