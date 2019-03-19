@@ -1,5 +1,22 @@
 # E-Mail Template & Dev Environment Scaffold
 
+## Table of Contents
+
+- [Installing](#installing)
+- [Configure](#configure)
+  + [`configure.js`](#configurejs)
+  + [`accounts.js`](#accountsjs)
+- [Publick Tasks](#public-tasks)
+  + [Default Task](#default-task)
+  + [`build` Task](#build-task)
+  + [`sendMail` Task](#sendmail-task)
+  + [`s3Deploy `Task](#s3deploy-task)
+- [How to Use](#how-to-use)
+    + [in development](#in-development)
+    + [clean build](#clean-build)
+    + [deploy images](#deploy-images)
+    + [Send email for inspecting product](#send-email-for-inspecting-product)
+
 ## Installing
 
 First, Install `gulp-cli` globally
