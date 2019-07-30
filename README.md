@@ -9,8 +9,8 @@
 - [Publick Tasks](#public-tasks)
   + [Default Task](#default-task)
   + [`build` Task](#build-task)
-  + [`sendMail` Task](#sendmail-task)
-  + [`s3Deploy `Task](#s3deploy-task)
+  + [`mail` Task](#mail-task)
+  + [`deploy `Task](#deploy-task)
 - [How to Use](#how-to-use)
     + [in development](#in-development)
     + [clean build](#clean-build)
@@ -64,20 +64,22 @@ Cleaning `dist` and temporary directories then same as default task except
 $ gulp build
 ```
 
-### `sendMail` Task
+### `mail` Task
 
-The task for testing on various email clients.
+The task for testing on various email clients. <br>
+You can choose email senders from `config.js` file.
 
 ```bash
-$ gulp sendMail
+$ gulp mail
 ```
 
-### `s3Deploy` Task
+### `deploy` Task
 
-Uploading images resources to server.
+Uploading images resources to server.<br>
+You can choose uploaders from `config.js` file.
 
 ```bash
-$ gulp s3Deploy
+$ gulp deploy
 ```
 
 
@@ -107,6 +109,18 @@ module.exports = {
     // subject of email
     subject: "",
   }
+
+  // Use FTP for deploy
+  deployFTP: true,
+
+  // Use AWS S3 for deploy
+  deployS3: false,
+
+  // Use SMTP for sending email
+  sendViaSMTP: true,
+
+  // Use AWS SES for sending email
+  sendViaSES: false,
 }
 ```
 
@@ -114,8 +128,26 @@ module.exports = {
 
 All settings are commented in the file. Uncomment and use the settings you need.
 
+<b style="color: red">※ Caution:</b>
+You should keep your accounts private by running `git rm --cached accounts.js`
+or by committing except `accounts.js` file.
+
 ```javascript
 module.exports = {
+  // for details, see https://github.com/morris/vinyl-ftp#ftpcreate-config-
+  ftp: {
+    // FTP host
+    host: "",
+    // FTP user
+    user : "",
+    // FTP password
+    password: "",
+    // Number of parallel transfers
+    parallel: 5,
+    // The remote path to upload to
+    path: "",
+  },
+
   // for details, see https://github.com/clineamb/gulp-s3-upload#gulp-s3-plugin-options
   s3: {
     // Access Key for S3
@@ -136,6 +168,21 @@ module.exports = {
     secretAccessKey: "",
     // Specify the region to send the service request to
     region: ""
+  },
+
+  // for details, see https://nodemailer.com/smtp/
+  smtp: {
+    // hostname or IP address to connect to
+    host: "",
+    // port to connect to
+    port: "",
+    // connection will use TLS when connecting to server.
+    secure: true,
+    // authentication data
+    auth: {
+      user: "",
+      pass: "",
+    }
   }
 }
 ```
@@ -151,8 +198,8 @@ $ gulp
 ```
 
 If you want to put the image on the server and check the local server that the
-server image has been applied, you can use `production` by passing the value as the
-mode argument.
+server image has been applied, you can use `production` by passing the value as
+the mode argument.
 
 ```bash
 $ gulp --mode production
@@ -180,16 +227,22 @@ $ gulp clean
 
 ### deploy images
 
-run the `s3Deploy` task.
+run the `deploy` task.
 
 ```bash
 $ gulp s3Deploy
 ```
 
+Currently, you can deploy to FTP, S3, or both, depending on the config.js file
+settings. <br>See [`configure.js`](#configurejs).
+
 ### Send email for inspecting product
 
-run the `sendMail` task.
+run the `mail` task.
 
 ```bash
-$ gulp sendMail
+$ gulp mail
 ```
+
+Currently, you can choose SMTP server or AWS SES, depending on the config.js
+file settings. <br>See [`configure.js`](#configurejs).

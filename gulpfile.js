@@ -17,6 +17,7 @@ const {src, dest, watch, lastRun, series, parallel} = require('gulp'),
   mail = require('nodemailer'),
   ses = require('nodemailer-ses-transport'),
   s3 = require('gulp-s3-upload'),
+  ftp = require('vinyl-ftp'),
   accounts = require('./accounts.js'),
   config = require('./config.js'),
   {
@@ -25,13 +26,14 @@ const {src, dest, watch, lastRun, series, parallel} = require('gulp'),
     isEmpty,
   } = require('./helper');
 
+const defaultConfig = {
+  "zipFileName": "email.zip"
+};
 
-const options = Object.assign(
-  {
-    zipFileName: "email.zip"
-  },
-  config,
-);
+options = {
+  ...defaultConfig,
+  ...config,
+};
 
 const server = () => {
   browserSync.init({
@@ -131,7 +133,29 @@ const s3Deploy = (done) => {
     })
 }
 
-const sendMail = (done) => {
+const ftpDeploy = (done) => {
+  if(isEmpty(accounts.ftp)) {
+    log.error(
+      colors.bold.red(`\u00D7 Cannot access FTP!!`),
+      colors.cyan(`Not defined FTP Configure in account.js.`)
+    );
+    done();
+    return;
+  }
+
+  const ftpConf = accounts.ftp;
+  const conn = ftp.create({log, ...ftpConf});
+
+  return src('dist/**', {buffer: false})
+    .pipe(conn.newer(ftpConf.path))
+    .pipe(conn.dest(ftpConf.path))
+    .on('error', (err) => {
+      log(colors.bold.red(err.message));
+      done();
+    });
+}
+
+const sendSES = (done) => {
   if (isEmpty(accounts.ses)) {
     log.error(
       colors.bold.red(`\u00D7 Cannot send email!!.\n`),
@@ -182,8 +206,77 @@ const sendMail = (done) => {
     });
 }
 
+const sendSMTP = (done) => {
+  if (isEmpty(accounts.smtp)) {
+    log.error(
+      colors.bold.red(`\u00D7 Cannot send email!!.\n`),
+      colors.cyan(`Not defined SMTP Configure in account.js`)
+    );
+    done();
+    return;
+  }
+  if(!config.mail.from || isEmpty(config.mail.to)) {
+    log.error(colors.bold.red(`\u00D7 Not defined e-Mail sender or reciver in config.js`));
+    return;
+  }
+
+  const transporter = mail.createTransport( accounts.smtp );
+  return src('dist/*.html')
+    .pipe(through.obj( function(file, enc, next) {
+      if(file.isNull()) {
+        log.error(colors.bold.red(`\u00D7 Email template wat not founded!!`));
+        done();
+        return;
+      }
+
+      if(file.isStream()) {
+        log.error(colors.bold.red(`\u00D7 Streams not supported!!`));
+        done();
+        return;
+      }
+
+      const data = file.contents.toString('utf8');
+      next(null, data);
+    }))
+    .on('data', html => {
+      const settings = {
+        ...config.mail,
+        html,
+      };
+      settings.subject = settings.subject || `제목 없음`;
+
+      transporter.sendMail(settings, (err, info) => {
+        if (err) {
+          console.log(`${colors.bold.red(err.message)}`);
+          return;
+        }
+        console.log(colors.green(`successfully sent email from ${info.envelope.from} to ${info.envelope.to}`))
+      })
+    });
+}
+
 exports.default = series(parallel(css, image), html, parallel(server, watchTask))
 exports.clean = clean;
 exports.build = build;
-exports.s3Deploy = s3Deploy;
-exports.sendMail = sendMail;
+exports.mail = series(
+  build,
+  done => {
+    if(config.sendViaSMTP) sendSMTP(done);
+    done();
+  },
+  done => {
+    if(config.sendViaSES) sendSES(done);
+    done();
+  }
+);
+exports.deploy = series(
+  build,
+  done => {
+    if(config.deployFTP) ftpDeploy(done);
+    done();
+  },
+  done => {
+    if(config.deployS3) s3Deploy(done);
+    done();
+  }
+);
