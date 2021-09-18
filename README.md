@@ -89,10 +89,10 @@ $ gulp deploy
 
 ```javascript
 module.exports = {
-  // Production server base-URL
+  // server base-URL for email resources
   hostBaseUrl: "",
 
-  // Production server path for email resources
+  // server path for email resources
   hostPath: "",
 
   // Name of the compressed file to be created by the build task

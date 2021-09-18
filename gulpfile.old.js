@@ -10,7 +10,6 @@ const {src, dest, watch, lastRun, series, parallel} = require('gulp'),
   imagemin = require('gulp-imagemin'),
   postcss = require('gulp-postcss'),
   autoprefixer = require('autoprefixer'),
-  cssnano = require('cssnano'),
   del = require('del'),
   zip = require('gulp-zip'),
   srcReplacer = require('gulp-replace-image-src'),
@@ -66,7 +65,7 @@ const html = () => {
 const css = () => {
   return src('source/scss/*.scss')
     .pipe(sass({outputStyle: 'compressed'}))
-    .pipe(postcss([autoprefixer(), cssnano()]))
+    .pipe(postcss([autoprefixer]))
     .pipe(dest('./tmp/css'))
 }
 
@@ -74,7 +73,7 @@ const image = () => {
   return src('source/images/**.{jpeg,jpg,gif,png}', {since: lastRun(image)})
     .pipe(imagemin([
       imagemin.gifsicle({interlaced: true}),
-      imagemin.mozjpeg({progressive: true}),
+      imagemin.jpegtran({progressive: true}),
       imagemin.optipng({optimizationLevel: 5}),
     ]))
     .pipe(dest('./dist/images'))
