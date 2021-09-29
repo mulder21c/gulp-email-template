@@ -5,7 +5,7 @@ const {src, dest, watch, lastRun, series, parallel} = require('gulp'),
   argv = minimist(process.argv.slice(2)),
   gulpIf = require('gulp-if'),
   browserSync = require('browser-sync').create(),
-  sass = require('gulp-sass'),
+  sass = require('gulp-sass')(require('sass')),
   inlineCss = require('gulp-inline-css'),
   imagemin = require('gulp-imagemin'),
   postcss = require('gulp-postcss'),
@@ -73,7 +73,7 @@ const image = () => {
   return src('source/images/**.{jpeg,jpg,gif,png}', {since: lastRun(image)})
     .pipe(imagemin([
       imagemin.gifsicle({interlaced: true}),
-      imagemin.jpegtran({progressive: true}),
+      imagemin.mozjpeg({progressive: true}),
       imagemin.optipng({optimizationLevel: 5}),
     ]))
     .pipe(dest('./dist/images'))
@@ -165,7 +165,7 @@ const sendSES = (done) => {
     return;
   }
   if(!config.mail.from || isEmpty(config.mail.to)) {
-    log.error(colors.bold.red(`\u00D7 Not defined e-Mail sender or reciver in config.js`));
+    log.error(colors.bold.red(`\u00D7 Not defined e-Mail sender or receiver in config.js`));
     done();
     return;
   }
@@ -216,7 +216,7 @@ const sendSMTP = (done) => {
     return;
   }
   if(!config.mail.from || isEmpty(config.mail.to)) {
-    log.error(colors.bold.red(`\u00D7 Not defined e-Mail sender or reciver in config.js`));
+    log.error(colors.bold.red(`\u00D7 Not defined e-Mail sender or receiver in config.js`));
     return;
   }
 
