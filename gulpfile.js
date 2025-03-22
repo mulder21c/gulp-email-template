@@ -6,6 +6,7 @@ const {src, dest, watch, lastRun, series, parallel} = require('gulp'),
   gulpIf = require('gulp-if'),
   browserSync = require('browser-sync').create(),
   sass = require('gulp-sass')(require('sass')),
+  beautify = require('gulp-beautify'),
   inlineCss = require('gulp-inline-css'),
   imagemin = require('gulp-imagemin'),
   postcss = require('gulp-postcss'),
@@ -46,14 +47,15 @@ const server = () => {
 
 const html = () => {
   return src('source/**/*.html')
-    .pipe(inlineCss({
-      applyStyleTags: true,
-      applyLinkTags: true,
-      removeStyleTags: true,
-      removeLinkTags: true,
-      removeHtmlSelectors: true
-    }))
-    .pipe(gulpIf(
+  .pipe(inlineCss({
+    applyStyleTags: true,
+    applyLinkTags: true,
+    removeStyleTags: true,
+    removeLinkTags: true,
+    removeHtmlSelectors: true
+  }))
+  .pipe(beautify.html({ indent_size: 2 }))
+  .pipe(gulpIf(
       argv.mode != 'production',
       srcReplacer({
         prependSrc: resolveUrl(options.hostBaseUrl, options.hostPath),
@@ -256,7 +258,7 @@ const sendSMTP = (done) => {
     });
 }
 
-exports.default = series(parallel(css, image), html, parallel(server, watchTask))
+exports.default = series(parallel(css), html, parallel(server, watchTask))
 exports.clean = clean;
 exports.build = build;
 exports.mail = series(

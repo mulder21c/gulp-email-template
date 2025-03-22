@@ -1,21 +1,208 @@
-body {
+* {
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+}
+
+body > div {
   display: block;
   margin: 0 auto;
-  max-width: 750px;
+  max-width: 600px;
   width: 100%;
+  background: #ffffff;
 
   > table {
-    margin: 0 auto;
-    padding: 0;
-    max-width: 750px;
-    width: 100%;
-    border-collapse: collapse;
-    border-spacing: 0;
+    max-width: 600px;
 
     td {
       margin: 0;
       padding: 0;
       border: 0;
+      box-sizing: border-box;
+      font-family: AppleSDGothicNeo-Regular, Malgun Gothic, dotum, sans-serif;
+      text-size-adjust:none
+    }
+  }
+}
+
+table {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.header {
+  width: 100%;
+  padding: 0 24px 10px;
+
+  > table {
+    width: 100%;
+  }
+
+  .logo {
+    height: 40px;
+    text-align: left;
+    vertical-align: bottom;
+
+    > a {
+      display: block;
+
+      > img {
+        display: block;
+        width: 104px;
+        height: 40px;
+      }
+    }
+  }
+
+  .date {
+    text-align: right;
+    vertical-align: bottom;
+    color: #888888;
+    line-height: 12px;
+    font-size: 14px;
+    letter-spacing: -0.5px;
+  }
+}
+
+.empty {
+  &.spacing-24 {
+    height: 24px;
+  }
+}
+
+.msg-box {
+  margin: 0 auto;
+  width: 100%;
+  border-radius: 26px;
+  padding: 30px 24px;
+  background-color: #EFEFF6;
+
+  &__inner {
+    margin: 0 auto;
+    border-radius: 16px;
+    padding: 40px 24px;
+    background-color: #fff;
+  }
+
+  &__divider{
+    padding: 16px 0;
+
+    &--border {
+      border-bottom: 1px solid #E6E6E6;
+    }
+
+    &--bottom {
+      padding: 16px 0 0;
+    }
+  }
+
+  &__header {
+    text-align: center;
+    color: #000000;
+    text-align: center;
+    font-family: "Malgun Gothic";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 27px;
+    letter-spacing: -1px;
+
+    &--accent {
+      color: #4876EF;
+    }
+  }
+
+  &__key {
+    padding: 5px 4px 5px 8px;
+    color: #666666;
+    font-family: "Malgun Gothic";
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px; /* 142.857% */
+    letter-spacing: -1px;
+    width: 68px;
+  }
+
+  &__val {
+    padding: 5px 8px 5px 0;
+    color: #000000;
+    font-family: "Malgun Gothic";
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 22px; /* 137.5% */
+    letter-spacing: -1px;
+  }
+
+  &__content {
+    padding: 24px 0;
+    color: #000000;
+    font-family: "Malgun Gothic";
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: -1px;
+  }
+
+  &__control {
+    text-align: center;
+
+    > a {
+      display: block;
+      margin: 0 auto;
+      width: 166px;
+      padding: 16px 0 15px;
+      border-radius: 10px;
+      background-color: #4876EF;
+      color: #ffffff;
+      text-align: center;
+      font-family: "Malgun Gothic";
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+      letter-spacing: -1px;
+    }
+  }
+
+  &__footer {
+    padding-top: 8px;
+    color: #888888;
+    text-align: center;
+    font-family: "Malgun Gothic";
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: -1px;
+  }
+}
+
+.footer {
+  padding: 48px 16px;
+  background-color: #8D919E;
+}
+
+.social-links {
+  margin: 0 auto;
+  padding-bottom: 32px;
+  height: 30px;
+  text-align: center;
+
+  &__item {
+    margin-left: 16px;
+    width: 42px;
+    height: 30px;
+
+    &:first-child {
+      margin-left: 0;
     }
   }
 }
