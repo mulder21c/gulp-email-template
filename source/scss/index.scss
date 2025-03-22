@@ -191,18 +191,57 @@ table {
 }
 
 .social-links {
-  margin: 0 auto;
-  padding-bottom: 32px;
+  margin: 0 auto 32px;
   height: 30px;
-  text-align: center;
+  width: 30px * 4 + 12px * 3;
 
   &__item {
-    margin-left: 16px;
-    width: 42px;
-    height: 30px;
+    width: 30px;
+    padding-left: 12px;
 
     &:first-child {
-      margin-left: 0;
+      padding-left: 0;
     }
+
+    > a, > a > img {
+      display: block;
+      width: 30px;
+      height: 30px;
+    }
+  }
+}
+
+.cscenter {
+  padding-bottom: 16px;
+  color: #E6E9F2;
+  font-family: "Malgun Gothic";
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: -1px;
+
+  > a {
+    color: #E6E9F2;
+    text-decoration-line: underline;
+    text-decoration-style: solid;
+    text-decoration-skip-ink: none;
+    text-decoration-thickness: auto;
+    text-underline-offset: auto;
+    text-underline-position: from-font;
+  }
+}
+
+.company-info {
+  color: #E6E9F2;
+  font-family: "Malgun Gothic";
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: -1px;
+
+  > .space {
+    margin: 0 4px;
   }
 }
